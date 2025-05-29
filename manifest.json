@@ -1,0 +1,25 @@
+{
+    "manifest_version": 3,
+    "name": "Auto Call & OK Clicker",
+    "version": "1.0",
+    "permissions": [
+      "scripting",
+      "activeTab",
+      "storage"
+    ],
+    "content_scripts": [
+      {
+        "matches": ["<all_urls>"],
+        "js": [
+          "content-utils.js",
+          "content-call-tracking.js",
+          "content-problematic.js",
+          "content-pagination.js",
+          "content-main.js",
+          "inject-copy-buttons.js",
+          "content-password-helper.js"
+        ],
+        "run_at": "document_end"
+      }
+    ]
+  }
