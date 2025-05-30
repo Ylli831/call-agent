@@ -161,7 +161,6 @@ function addSummaryNotification(problematicNumbers) {
     const summaryDiv = document.createElement('div');
     summaryDiv.id = 'phone-status-summary';
     let flaggedList = "";
-    // let count = 0;   // <-- REMOVE THIS LINE
     // Use problematicNumbers.size for the count
     for (const [number, details] of Object.entries(problematicNumbersDetails)) {
         if (problematicNumbers.has(number)) {
