@@ -1,4 +1,4 @@
-// Problematic number detection and banner
+// Problematic number detection and banner - Improved version
 
 function findProblematicNumbersCached() {
     const commentSelectors = [
@@ -11,46 +11,59 @@ function findProblematicNumbersCached() {
     ];
     let commentsText = '';
     problematicNumbersDetails = {}; // reset on each scan
+
+    // Gather all negative comments first
+    let negativeComments = [];
     commentSelectors.forEach(selector => {
         document.querySelectorAll(selector).forEach(e => {
+            const text = (e.textContent || '').toLowerCase();
+            const matchedKeyword = negativeKeywords.find(keyword => text.includes(keyword));
+            if (matchedKeyword) {
+                negativeComments.push({ 
+                    text, 
+                    raw: e.textContent || '', 
+                    keyword: matchedKeyword 
+                });
+            }
             commentsText += (e.textContent || '') + '||';
         });
     });
+
     const textHash = hashString(commentsText);
 
-    if (textHash === lastCommentsTextHash && problematicNumbersCache.size > 0) {
+    if (textHash === lastCommentsTextHash && problematicNumbersCache && problematicNumbersCache.size > 0) {
         return problematicNumbersCache;
     }
     lastCommentsTextHash = textHash;
 
     const problematicNumbers = new Set();
-    // Main logic: detect direct number + negative keyword in comments
-    commentSelectors.forEach(selector => {
-        document.querySelectorAll(selector).forEach(element => {
-            const commentText = element.textContent || element.innerText;
-            const matchedKeyword = negativeKeywords.find(keyword => commentText.toLowerCase().includes(keyword));
-            if (matchedKeyword) {
-                extractPhoneNumbers(commentText).forEach(number => {
-                    problematicNumbers.add(number);
-                    problematicNumbersDetails[number] = {comment: commentText.trim(), keyword: matchedKeyword};
-                });
-                document.querySelectorAll('[href^="tel:"]').forEach(phoneLink => {
-                    const phoneNumber = phoneLink.getAttribute('href').replace('tel:', '');
-                    const lastFour = phoneNumber.slice(-4);
-                    const lastFive = phoneNumber.slice(-5);
-                    if (commentText.includes(lastFour) || commentText.includes(lastFive)) {
-                        problematicNumbers.add(phoneNumber);
-                        problematicNumbersDetails[phoneNumber] = {comment: commentText.trim(), keyword: matchedKeyword || 'number match'};
-                    }
-                });
+
+    // For each tel: link, check if its last 4/5 digits are in ANY negative comment
+    document.querySelectorAll('[href^="tel:"]').forEach(phoneLink => {
+        const phoneNumber = phoneLink.getAttribute('href').replace('tel:', '');
+        const lastFour = phoneNumber.slice(-4);
+        const lastFive = phoneNumber.slice(-5);
+        negativeComments.forEach(({ text, raw, keyword }) => {
+            // Only flag if last 4 or 5 digits are present as standalone numbers (not as part of a longer number)
+            const regexLastFour = new RegExp(`\\b${lastFour}\\b`);
+            const regexLastFive = new RegExp(`\\b${lastFive}\\b`);
+            if (regexLastFour.test(text) || regexLastFive.test(text)) {
+                problematicNumbers.add(phoneNumber);
+                problematicNumbersDetails[phoneNumber] = { comment: raw.trim(), keyword: keyword || 'number match' };
             }
         });
     });
 
-    // --- Enhancement: Order-based comment handling ---
-    // Gather phone rows in the order they appear
-    const phoneRows = Array.from(document.querySelectorAll('.clearfix.m-b-sm.text-left'));
+    // Also extract direct numbers from negative comments if present
+    negativeComments.forEach(({ text, raw, keyword }) => {
+        extractPhoneNumbers(raw).forEach(number => {
+            problematicNumbers.add(number);
+            problematicNumbersDetails[number] = { comment: raw.trim(), keyword: keyword };
+        });
+    });
 
+    // --- Enhancement: Order-based comment handling (unchanged) ---
+    const phoneRows = Array.from(document.querySelectorAll('.clearfix.m-b-sm.text-left'));
     const ordinalMap = {
         "first": 0, "1st": 0, "one": 0, "1": 0,
         "second": 1, "2nd": 1, "two": 1, "2": 1,
@@ -63,13 +76,10 @@ function findProblematicNumbersCached() {
         "ninth": 8, "9th": 8, "nine": 8, "9": 8,
         "tenth": 9, "10th": 9, "ten": 9, "10": 9,
     };
-
-    // Compose regex for order-based comments
     const orderRegex = new RegExp(
         `(first|1st|one|1|second|2nd|two|2|third|3rd|three|3|fourth|4th|four|4|fifth|5th|five|5|sixth|6th|six|6|seventh|7th|seven|7|eighth|8th|eight|8|ninth|9th|nine|9|tenth|10th|ten|10)[^\\w]+(number|#)?[^\\w]*(${negativeKeywords.join('|')})`,
         "i"
     );
-
     commentSelectors.forEach(selector => {
         document.querySelectorAll(selector).forEach(commentDiv => {
             const text = (commentDiv.textContent || "").toLowerCase();
@@ -99,7 +109,7 @@ function findProblematicNumbersCached() {
 
 function markProblematicNumbers() {
     const problematicNumbers = findProblematicNumbersCached();
-    if (problematicNumbers.size === 0) {
+    if (!problematicNumbers || problematicNumbers.size === 0) {
         document.querySelectorAll('.phone-problematic').forEach(row => row.classList.remove('phone-problematic'));
         document.querySelectorAll('.warning-indicator').forEach(indicator => indicator.remove());
         const summary = document.getElementById('phone-status-summary');

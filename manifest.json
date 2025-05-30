@@ -24,7 +24,8 @@
         "content-pagination.js",
         "content-main.js",
         "inject-copy-buttons.js",
-        "content-password-helper.js"
+        "content-password-helper.js",
+        "content-move-no-answer.js"
       ],
       "run_at": "document_end"
     }

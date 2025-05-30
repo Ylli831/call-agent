@@ -1,41 +1,54 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="UTF-8">
-    <title>Call Agent Extension</title>
+    <title>Call Agent - Productivity</title>
+    <meta charset="utf-8" />
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 16px;
-            min-width: 220px;
-            min-height: 90px;
-        }
-        #resetCallCountsBtn {
-            margin: 8px 0;
-            padding: 7px 18px;
-            background: #f44336;
-            color: #fff;
-            border: none;
-            border-radius: 4px;
-            font-weight: bold;
-            cursor: pointer;
-            font-size: 15px;
-            box-shadow: 0 2px 8px rgba(80,0,0,0.09);
-            transition: background 0.2s;
-        }
-        #resetCallCountsBtn:hover {
-            background: #d32f2f;
-        }
-        #statusMsg {
-            margin-top: 10px;
-            color: #388e3c;
-            font-size: 14px;
-        }
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f7fafc; margin: 0; padding: 0; width: 370px; }
+        #tabs { display: flex; border-bottom: 1px solid #ddd; }
+        #tabs button { flex: 1; padding: 12px; background: none; border: none; border-bottom: 3px solid transparent; font-size: 16px; cursor: pointer; }
+        #tabs button.active { border-bottom: 3px solid #1976d2; color: #1976d2; font-weight: bold; }
+        .tab-content { display: none; padding: 15px 20px 10px 20px; }
+        .tab-content.active { display: block; }
+        .progress-bar { background: #e3e3e3; border-radius: 5px; overflow: hidden; height: 18px; margin: 6px 0 12px 0; }
+        .progress-bar-inner { background: #1976d2; height: 100%; transition: width 0.4s; }
+        table { width: 100%; font-size: 14px; border-collapse: collapse; }
+        th, td { text-align: left; padding: 4px 6px; }
+        th { background: #eee; }
+        .export-btn, .reset-btn, .save-btn { background: #1976d2; color: #fff; border: none; border-radius: 4px; padding: 6px 14px; margin: 7px 4px 7px 0; cursor: pointer; }
+        .reset-btn { background: #e53935; }
+        .save-btn { background: #388e3c; }
+        .settings-box input { width: 50px; }
+        .warning { color: #e53935; font-weight: bold; }
     </style>
 </head>
 <body>
-    <button id="resetCallCountsBtn">Reset Call Counts</button>
-    <div id="statusMsg"></div>
+    <div id="tabs">
+        <button id="tab-overview" class="active">Overview</button>
+        <button id="tab-hourly">Hourly</button>
+        <button id="tab-export">Export</button>
+        <button id="tab-settings">Settings</button>
+    </div>
+    <div id="tab-overview-content" class="tab-content active">
+        <div id="overview-summary"></div>
+    </div>
+    <div id="tab-hourly-content" class="tab-content">
+        <div id="hourly-breakdown"></div>
+    </div>
+    <div id="tab-export-content" class="tab-content">
+        <button class="export-btn" id="export-csv-btn">Export Today as CSV</button>
+        <button class="reset-btn" id="reset-log-btn">Reset Today</button>
+        <div id="export-status"></div>
+    </div>
+    <div id="tab-settings-content" class="tab-content">
+        <div class="settings-box">
+            <label>Hourly quota: <input id="set-hourly-quota" type="number" min="1" value="120"> calls</label><br>
+            <label>Daily hours: <input id="set-daily-hours" type="number" min="1" max="24" value="8"></label><br>
+            <label>Work start hour: <input id="set-work-start" type="number" min="0" max="23" value="18"> (24h)</label><br>
+            <button class="save-btn" id="save-settings-btn">Save Settings</button>
+        </div>
+        <div id="settings-status"></div>
+    </div>
     <script src="popup.js"></script>
 </body>
 </html>
