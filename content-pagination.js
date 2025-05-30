@@ -12,22 +12,6 @@ function addAutoPaginationButtons() {
     const prevBtn = btns[0];
     const nextBtn = btns[1];
 
-    const autoPrevBtn = document.createElement('button');
-    autoPrevBtn.id = 'auto-prev-toggle';
-    autoPrevBtn.textContent = '⏮️ Auto Prev';
-    autoPrevBtn.className = 'btn btn-sm';
-    autoPrevBtn.style.marginRight = '7px';
-    autoPrevBtn.style.fontWeight = 'bold';
-    autoPrevBtn.style.background = localStorage.getItem('autoPrevEnabled') === 'true' ? '#ffc107' : '#eee';
-
-    const autoNextBtn = document.createElement('button');
-    autoNextBtn.id = 'auto-next-toggle';
-    autoNextBtn.textContent = 'Auto Next ⏭️';
-    autoNextBtn.className = 'btn btn-sm';
-    autoNextBtn.style.marginLeft = '7px';
-    autoNextBtn.style.fontWeight = 'bold';
-    autoNextBtn.style.background = localStorage.getItem('autoNextEnabled') === 'true' ? '#ffc107' : '#eee';
-
     autoPrevBtn.onclick = () => {
         const enabled = localStorage.getItem('autoPrevEnabled') === 'true';
         localStorage.setItem('autoPrevEnabled', !enabled);

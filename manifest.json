@@ -1,18 +1,18 @@
 {
   "manifest_version": 3,
-  "name": "Auto Call & OK Clicker",
-  "version": "1.0",
+  "name": "Call Agent",
+  "description": "Optimized Auto Call & Phone Checker with Call Tracking",
+  "version": "1.4.0",
   "permissions": [
-    "scripting",
-    "activeTab",
     "storage",
+    "scripting",
     "tabs"
+  ],
+  "host_permissions": [
+    "<all_urls>"
   ],
   "background": {
     "service_worker": "background.js"
-  },
-  "action": {
-    "default_popup": "popup.html"
   },
   "content_scripts": [
     {
@@ -28,5 +28,9 @@
       ],
       "run_at": "document_end"
     }
-  ]
+  ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Call Agent"
+  }
 }

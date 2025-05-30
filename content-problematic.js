@@ -24,6 +24,7 @@ function findProblematicNumbersCached() {
     lastCommentsTextHash = textHash;
 
     const problematicNumbers = new Set();
+    // Main logic: detect direct number + negative keyword in comments
     commentSelectors.forEach(selector => {
         document.querySelectorAll(selector).forEach(element => {
             const commentText = element.textContent || element.innerText;
@@ -45,6 +46,53 @@ function findProblematicNumbersCached() {
             }
         });
     });
+
+    // --- Enhancement: Order-based comment handling ---
+    // Gather phone rows in the order they appear
+    const phoneRows = Array.from(document.querySelectorAll('.clearfix.m-b-sm.text-left'));
+
+    const ordinalMap = {
+        "first": 0, "1st": 0, "one": 0, "1": 0,
+        "second": 1, "2nd": 1, "two": 1, "2": 1,
+        "third": 2, "3rd": 2, "three": 2, "3": 2,
+        "fourth": 3, "4th": 3, "four": 3, "4": 3,
+        "fifth": 4, "5th": 4, "five": 4, "5": 4,
+        "sixth": 5, "6th": 5, "six": 5, "6": 5,
+        "seventh": 6, "7th": 6, "seven": 6, "7": 6,
+        "eighth": 7, "8th": 7, "eight": 7, "8": 7,
+        "ninth": 8, "9th": 8, "nine": 8, "9": 8,
+        "tenth": 9, "10th": 9, "ten": 9, "10": 9,
+    };
+
+    // Compose regex for order-based comments
+    const orderRegex = new RegExp(
+        `(first|1st|one|1|second|2nd|two|2|third|3rd|three|3|fourth|4th|four|4|fifth|5th|five|5|sixth|6th|six|6|seventh|7th|seven|7|eighth|8th|eight|8|ninth|9th|nine|9|tenth|10th|ten|10)[^\\w]+(number|#)?[^\\w]*(${negativeKeywords.join('|')})`,
+        "i"
+    );
+
+    commentSelectors.forEach(selector => {
+        document.querySelectorAll(selector).forEach(commentDiv => {
+            const text = (commentDiv.textContent || "").toLowerCase();
+            const match = text.match(orderRegex);
+            if (match) {
+                const ordinal = match[1];
+                const keyword = match[3];
+                const idx = ordinalMap[ordinal];
+                if (idx !== undefined && phoneRows[idx]) {
+                    const numberDiv = phoneRows[idx].querySelector('.col-xs-7');
+                    const phoneNumber = numberDiv ? (numberDiv.textContent.match(/\d{10}/) || [])[0] : null;
+                    if (phoneNumber) {
+                        problematicNumbers.add(phoneNumber);
+                        problematicNumbersDetails[phoneNumber] = {
+                            comment: commentDiv.textContent.trim(),
+                            keyword: keyword + " (order-based)"
+                        };
+                    }
+                }
+            }
+        });
+    });
+
     problematicNumbersCache = problematicNumbers;
     return problematicNumbers;
 }
