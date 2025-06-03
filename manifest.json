@@ -25,7 +25,10 @@
         "content-main.js",
         "inject-copy-buttons.js",
         "content-password-helper.js",
-        "content-move-no-answer.js"
+        "content-move-no-asnwer.js",
+        "content-password-helper.js",
+        "content-lead-filter-preset.js",
+        "content-call-statistics.js"
       ],
       "run_at": "document_end"
     }
@@ -33,5 +36,13 @@
   "action": {
     "default_popup": "popup.html",
     "default_title": "Call Agent"
-  }
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "popup.js"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ]
 }

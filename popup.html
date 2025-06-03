@@ -21,11 +21,14 @@
         .settings-box input { width: 50px; }
         .warning { color: #e53935; font-weight: bold; }
     </style>
+    <!-- Chart.js for statistics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div id="tabs">
         <button id="tab-overview" class="active">Overview</button>
         <button id="tab-hourly">Hourly</button>
+        <button id="tab-stats">Stats</button>
         <button id="tab-export">Export</button>
         <button id="tab-settings">Settings</button>
     </div>
@@ -34,6 +37,11 @@
     </div>
     <div id="tab-hourly-content" class="tab-content">
         <div id="hourly-breakdown"></div>
+    </div>
+    <div id="tab-stats-content" class="tab-content">
+        <div id="advanced-stats-panel"></div>
+        <button class="export-btn" id="export-advanced-csv-btn">Export All as CSV</button>
+        <div id="advanced-export-status"></div>
     </div>
     <div id="tab-export-content" class="tab-content">
         <button class="export-btn" id="export-csv-btn">Export Today as CSV</button>
@@ -50,5 +58,6 @@
         <div id="settings-status"></div>
     </div>
     <script src="popup.js"></script>
+    <script src="reset-call-count.js"></script>
 </body>
 </html>
