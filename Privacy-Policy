@@ -1,0 +1,65 @@
+# Privacy Policy for Lead Data Exporter Extension
+
+**Last Updated: August 31, 2025**
+
+## Introduction
+
+Welcome to the Lead Data Exporter Chrome Extension ("we," "us," or "our"). This Privacy Policy explains how we collect, use, store, and protect your information when you use our extension. By using the Lead Data Exporter, you agree to the terms of this Privacy Policy.
+
+## Data Collection
+
+The Lead Data Exporter is designed to scrape and export lead and policy data from web pages for personal use. We collect the following types of data:
+
+- **Lead Information**: Names, phone numbers, and other identifying details from the web pages you visit.
+- **Policy Details**: Policy names, numbers, dates of birth, stages, and policy owners.
+- **Usage Data**: Information about how you interact with the extension, such as when you start or stop data collection.
+
+This data is collected directly from the web pages you browse and is processed locally on your device.
+
+## Data Usage
+
+The collected data is used solely for the purpose of exporting it to an Excel file for your personal use. We do not use this data for any other purposes, including marketing, analytics, or sharing with third parties.
+
+## Data Storage
+
+All data collected by the extension is stored locally on your device using Chrome's local storage. This means:
+
+- Data is not transmitted to any external servers.
+- Data remains on your device and is only accessible by you.
+- You can clear the data at any time by using the extension's clear function or by clearing your browser's local storage.
+
+## Data Sharing
+
+We do not share, sell, or transmit any of the collected data to third parties. The extension operates entirely offline and locally, ensuring your data stays private and secure.
+
+## Permissions
+
+The extension requires the following permissions to function:
+
+- **Active Tab**: To access the current web page for data scraping.
+- **Storage**: To save collected data locally on your device.
+- **Host Permissions (<all_urls>)**: To scrape data from any web page you visit.
+
+These permissions are used only for the extension's core functionality and are not used to collect additional data beyond what is necessary.
+
+## User Rights
+
+You have the following rights regarding your data:
+
+- **Access**: You can view the collected data within the extension's interface.
+- **Deletion**: You can delete all collected data using the extension's clear button or by clearing your browser's storage.
+- **Control**: You can start and stop data collection at any time.
+
+## Security
+
+We take the security of your data seriously. Since all data is stored locally on your device, it is protected by your device's security measures. We recommend keeping your browser and device updated to ensure optimal security.
+
+## Changes to This Privacy Policy
+
+We may update this Privacy Policy from time to time. Any changes will be reflected in the "Last Updated" date at the top of this policy. We encourage you to review this policy periodically.
+
+## Contact Us
+
+If you have any questions or concerns about this Privacy Policy or the extension, please contact us at [Your Email Address] or [Your Contact Information].
+
+Thank you for using the Lead Data Exporter Extension!
